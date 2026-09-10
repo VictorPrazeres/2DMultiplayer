@@ -6,4 +6,5 @@
 script = ExtResource("1_ig7tw")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://dp5836u66xfiw")
 spawn_path = NodePath("..")

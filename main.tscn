@@ -11,4 +11,4 @@ _spawnable_scenes = PackedStringArray("uid://dp5836u66xfiw")
 spawn_path = NodePath("..")
 
 [node name="Enemy" parent="." instance=ExtResource("2_0xm2m")]
-position = Vector2(273, 150)
+position = Vector2(171, 149)

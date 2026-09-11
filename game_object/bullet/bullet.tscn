@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dp5836u66xfiw"]
+[gd_scene load_steps=5 format=3 uid="uid://dp5836u66xfiw"]
 
 [ext_resource type="Script" uid="uid://dgs00qjlv1m7r" path="res://game_object/bullet/bullet.gd" id="1_1wu1k"]
 [ext_resource type="Texture2D" uid="uid://3dfn4rkmlme3" path="res://game_object/bullet/bullet.png" id="1_j5myr"]
@@ -14,6 +14,8 @@ properties/2/path = NodePath(".:direction")
 properties/2/spawn = true
 properties/2/replication_mode = 0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_1wu1k"]
+
 [node name="Bullet" type="Node2D"]
 script = ExtResource("1_1wu1k")
 
@@ -24,6 +26,13 @@ replication_config = SubResource("SceneReplicationConfig_1wu1k")
 wait_time = 2.0
 one_shot = true
 autostart = true
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 256
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_1wu1k")
 
 [node name="Texture" type="Sprite2D" parent="."]
 texture = ExtResource("1_j5myr")

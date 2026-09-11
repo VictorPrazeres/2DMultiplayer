@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dm0754lgs1m7u"]
+
+[ext_resource type="Texture2D" uid="uid://cbsaisnil07vn" path="res://entities/enemy/enemy_medium.png" id="1_ksmh7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ksmh7"]
+radius = 4.0
+
+[node name="Enemy" type="CharacterBody2D"]
+
+[node name="Texture" type="Sprite2D" parent="."]
+texture = ExtResource("1_ksmh7")
+centered = false
+offset = Vector2(-8, -23)
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_ksmh7")

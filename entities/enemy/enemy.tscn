@@ -15,6 +15,8 @@ size = Vector2(16, 24)
 radius = 4.0
 
 [node name="Enemy" type="CharacterBody2D"]
+collision_layer = 0
+motion_mode = 1
 script = ExtResource("1_im2q6")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]

@@ -1,7 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dm0754lgs1m7u"]
+[gd_scene load_steps=6 format=3 uid="uid://dm0754lgs1m7u"]
 
 [ext_resource type="Script" uid="uid://b3m16r7ng73s1" path="res://entities/enemy/enemy.gd" id="1_im2q6"]
 [ext_resource type="Texture2D" uid="uid://cbsaisnil07vn" path="res://entities/enemy/enemy_medium.png" id="1_ksmh7"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_im2q6"]
+properties/0/path = NodePath(".:global_position")
+properties/0/spawn = true
+properties/0/replication_mode = 0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ksmh7"]
 size = Vector2(16, 24)
@@ -11,6 +16,9 @@ radius = 4.0
 
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_im2q6")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_im2q6")
 
 [node name="Hurtbox" type="Area2D" parent="."]
 position = Vector2(0, -12)

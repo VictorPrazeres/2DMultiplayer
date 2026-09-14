@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cjqc31ns8shcp"]
+[gd_scene load_steps=10 format=3 uid="uid://cjqc31ns8shcp"]
 
 [ext_resource type="Script" uid="uid://3k7mrumbq40m" path="res://entities/player/player.gd" id="1_symyc"]
 [ext_resource type="PackedScene" uid="uid://c7tnietnej0fv" path="res://component/player_input_synchronizer_component.tscn" id="2_abrql"]
+[ext_resource type="PackedScene" uid="uid://b5k0c38me5gwc" path="res://component/health_component.tscn" id="3_fkugw"]
 [ext_resource type="Texture2D" uid="uid://b6666ae3uwiw" path="res://entities/player/player-medium.png" id="3_sglur"]
+[ext_resource type="PackedScene" uid="uid://dtcmhq7l4n15v" path="res://component/hurtbox_component.tscn" id="4_8fjmc"]
 [ext_resource type="Texture2D" uid="uid://cal60ved6wkuv" path="res://entities/player/rifle.png" id="4_bls4j"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_abrql"]
@@ -11,6 +13,9 @@ properties/0/spawn = true
 properties/0/replication_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sfv1e"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8fjmc"]
+radius = 5.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_layer = 0
@@ -22,6 +27,9 @@ aim_root = NodePath("../WeaponRoot")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_abrql")
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_fkugw")]
+max_health = 5
 
 [node name="FireRateTimer" type="Timer" parent="."]
 wait_time = 0.25
@@ -44,3 +52,11 @@ offset = Vector2(-15, -6)
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -10)
 shape = SubResource("CircleShape2D_sfv1e")
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_8fjmc")]
+position = Vector2(0, -11)
+collision_mask = 4
+health_component = NodePath("../HealthComponent")
+
+[node name="Collision" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_8fjmc")

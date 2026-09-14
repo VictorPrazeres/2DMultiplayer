@@ -2,13 +2,11 @@ extends CharacterBody2D
 
 var target_position: Vector2
 
-@onready var hurtbox: Area2D = $Hurtbox
 @onready var target_acquisition_timer: Timer = $TargetAcquisitionTimer
 @onready var health_component: HealthComponent = $HealthComponent
 
 
 func _ready() -> void:
-	hurtbox.area_entered.connect(_on_area_entered)
 	target_acquisition_timer.timeout.connect(_on_target_acquisition_timer_timeout)
 	
 	if is_multiplayer_authority():
@@ -20,10 +18,6 @@ func _process(_delta: float) -> void:
 	if is_multiplayer_authority():
 		velocity = global_position.direction_to(target_position) * 40
 		move_and_slide()
-
-
-func handle_hit():
-	health_component.damage(1)
 
 
 func acquire_target():
@@ -44,15 +38,6 @@ func acquire_target():
 	
 	if nearest_player != null:
 		target_position = nearest_player.global_position
-
-
-func _on_area_entered(other_area: Area2D):
-	if !is_multiplayer_authority():
-		return
-	if other_area.owner is Bullet:
-		var bullet = other_area.owner as Bullet
-		bullet.register_collision()
-		handle_hit()
 
 
 func _on_target_acquisition_timer_timeout():

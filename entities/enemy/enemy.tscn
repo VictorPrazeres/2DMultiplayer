@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dm0754lgs1m7u"]
+[gd_scene load_steps=7 format=3 uid="uid://dm0754lgs1m7u"]
 
 [ext_resource type="Script" uid="uid://b3m16r7ng73s1" path="res://entities/enemy/enemy.gd" id="1_im2q6"]
 [ext_resource type="Texture2D" uid="uid://cbsaisnil07vn" path="res://entities/enemy/enemy_medium.png" id="1_ksmh7"]
+[ext_resource type="PackedScene" uid="uid://b5k0c38me5gwc" path="res://component/health_component.tscn" id="2_3fvr7"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_im2q6"]
 properties/0/path = NodePath(".:global_position")
@@ -25,6 +26,9 @@ replication_config = SubResource("SceneReplicationConfig_im2q6")
 [node name="TargetAcquisitionTimer" type="Timer" parent="."]
 wait_time = 0.2
 autostart = true
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_3fvr7")]
+max_health = 2
 
 [node name="Hurtbox" type="Area2D" parent="."]
 position = Vector2(0, -12)

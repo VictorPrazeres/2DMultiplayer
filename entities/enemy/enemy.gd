@@ -61,4 +61,5 @@ func _on_target_acquisition_timer_timeout():
 
 
 func _on_died():
+	GameEvents.emit_enemy_died()
 	queue_free()

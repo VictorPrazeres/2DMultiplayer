@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cjqc31ns8shcp"]
+[gd_scene load_steps=13 format=3 uid="uid://cjqc31ns8shcp"]
 
 [ext_resource type="Script" uid="uid://3k7mrumbq40m" path="res://entities/player/player.gd" id="1_symyc"]
 [ext_resource type="PackedScene" uid="uid://c7tnietnej0fv" path="res://component/player_input_synchronizer_component.tscn" id="2_abrql"]
@@ -6,6 +6,68 @@
 [ext_resource type="Texture2D" uid="uid://b6666ae3uwiw" path="res://entities/player/player-medium.png" id="3_sglur"]
 [ext_resource type="PackedScene" uid="uid://dtcmhq7l4n15v" path="res://component/hurtbox_component.tscn" id="4_8fjmc"]
 [ext_resource type="Texture2D" uid="uid://cal60ved6wkuv" path="res://entities/player/rifle.png" id="4_bls4j"]
+
+[sub_resource type="Animation" id="Animation_8fjmc"]
+resource_name = "fire"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/WeaponRoot/WeaponAnimationRoot:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.6, 1.5), Vector2(1.25, 0.75), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/WeaponRoot/WeaponAnimationRoot:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.261799, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_qiwj3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/WeaponRoot/WeaponAnimationRoot:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/WeaponRoot/WeaponAnimationRoot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_26q78"]
+_data = {
+&"RESET": SubResource("Animation_qiwj3"),
+&"fire": SubResource("Animation_8fjmc")
+}
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_abrql"]
 properties/0/path = NodePath(".:global_position")
@@ -21,6 +83,11 @@ radius = 5.0
 collision_layer = 0
 motion_mode = 1
 script = ExtResource("1_symyc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_26q78")
+}
 
 [node name="PlayerInputSynchronizerComponent" parent="." node_paths=PackedStringArray("aim_root") instance=ExtResource("2_abrql")]
 aim_root = NodePath("../Visuals/WeaponRoot")
@@ -45,17 +112,21 @@ offset = Vector2(-8, -26)
 [node name="WeaponRoot" type="Node2D" parent="Visuals"]
 position = Vector2(0, -9)
 
-[node name="Texture" type="Sprite2D" parent="Visuals/WeaponRoot"]
+[node name="WeaponAnimationRoot" type="Node2D" parent="Visuals/WeaponRoot"]
 position = Vector2(6, 0)
+
+[node name="Texture" type="Sprite2D" parent="Visuals/WeaponRoot/WeaponAnimationRoot"]
 texture = ExtResource("4_bls4j")
 centered = false
 offset = Vector2(-13, -6)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -10)
 shape = SubResource("CircleShape2D_sfv1e")
 
 [node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_8fjmc")]
+visible = false
 position = Vector2(0, -11)
 collision_mask = 4
 health_component = NodePath("../HealthComponent")

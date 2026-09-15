@@ -2,6 +2,7 @@ class_name Player extends CharacterBody2D
 
 var input_multiplayer_authority: int
 var bullet_scene: PackedScene = preload("uid://dp5836u66xfiw")
+var muzzle_flash_scene: PackedScene = preload("uid://bmaw6soihoeu7")
 
 @onready var player_input_synchronizer_component: PlayerInputSynchronizerComponent = $PlayerInputSynchronizerComponent
 @onready var weapon_root: Node2D = $Visuals/WeaponRoot
@@ -9,6 +10,7 @@ var bullet_scene: PackedScene = preload("uid://dp5836u66xfiw")
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var visuals: Node2D = $Visuals
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var barrel_position: Marker2D = %BarrelPosition
 
 
 func _ready() -> void:
@@ -38,7 +40,7 @@ func try_fire():
 		return
 	
 	var bullet = bullet_scene.instantiate() as Bullet
-	bullet.global_position = weapon_root.global_position
+	bullet.global_position = barrel_position.global_position
 	bullet.start(player_input_synchronizer_component.aim_vector)
 	get_parent().add_child(bullet, true)
 	fire_rate_timer.start()
@@ -51,6 +53,11 @@ func play_fire_effects():
 	if animation_player.is_playing():
 		animation_player.stop()
 	animation_player.play("fire")
+	
+	var muzzle_flash: Node2D = muzzle_flash_scene.instantiate()
+	muzzle_flash.global_position = barrel_position.global_position
+	muzzle_flash.rotation = barrel_position.global_rotation
+	get_parent().add_child(muzzle_flash)
 
 
 func _on_died():

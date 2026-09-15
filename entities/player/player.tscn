@@ -120,6 +120,10 @@ texture = ExtResource("4_bls4j")
 centered = false
 offset = Vector2(-13, -6)
 
+[node name="BarrelPosition" type="Marker2D" parent="Visuals/WeaponRoot/WeaponAnimationRoot"]
+unique_name_in_owner = true
+position = Vector2(18, -1)
+
 [node name="Collision" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2(0, -10)

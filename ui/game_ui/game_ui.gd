@@ -7,12 +7,12 @@ extends CanvasLayer
 
 
 func _ready() -> void:
-	enemy_manager.round_began.connect(_on_round_began)
+	enemy_manager.round_changed.connect(_on_round_changed)
 
 
 func _process(_delta: float) -> void:
 	timer_label.text = str(ceili(enemy_manager.get_round_time_remaining()))
 
 
-func _on_round_began(round_count: int):
+func _on_round_changed(round_count: int):
 	round_label.text = "Round %s" % round_count

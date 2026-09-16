@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://d136jsptxend8"]
+
+[ext_resource type="Script" uid="uid://ja6lhsa0xqq3" path="res://ui/game_ui/game_ui.gd" id="1_5rq5h"]
+
+[node name="GameUI" type="CanvasLayer"]
+script = ExtResource("1_5rq5h")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 16
+
+[node name="VContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="RoundLabel" type="Label" parent="MarginContainer/VContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Round 1"
+
+[node name="TimerLabel" type="Label" parent="MarginContainer/VContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "30"

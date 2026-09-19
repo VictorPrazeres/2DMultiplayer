@@ -67,6 +67,7 @@ attack={
 [layer_names]
 
 2d_physics/layer_1="Terrain"
+2d_physics/layer_2="EnemyCharacterBody"
 2d_physics/layer_3="Enemy"
 2d_physics/layer_9="Bullet"
 

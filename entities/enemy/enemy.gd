@@ -1,13 +1,17 @@
 extends CharacterBody2D
 
 var target_position: Vector2
+var is_spawning: bool
 
 @onready var target_acquisition_timer: Timer = $TargetAcquisitionTimer
 @onready var health_component: HealthComponent = $HealthComponent
+@onready var visuals: Node2D = $Visuals
 
 
 func _ready() -> void:
 	target_acquisition_timer.timeout.connect(_on_target_acquisition_timer_timeout)
+	
+	play_spawn_animation()
 	
 	if is_multiplayer_authority():
 		health_component.died.connect(_on_died)
@@ -15,9 +19,25 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if is_multiplayer_authority():
+	if is_multiplayer_authority() && !is_spawning:
 		velocity = global_position.direction_to(target_position) * 40
 		move_and_slide()
+	
+	if !is_spawning:
+		flip()
+
+
+func flip():
+	visuals.scale = Vector2.ONE if target_position.x > global_position.x else  Vector2(-1, 1)
+
+
+func play_spawn_animation():
+	is_spawning = true
+	var tween := create_tween()
+	tween.tween_property(visuals, "scale", Vector2.ONE, .4).from(Vector2.ZERO).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.finished.connect(func ():
+		is_spawning = false
+	)
 
 
 func acquire_target():

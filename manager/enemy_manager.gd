@@ -1,6 +1,7 @@
 class_name EnemyManager extends Node
 
 signal round_changed(round_number: int)
+signal round_completed
 
 const ROUND_BASE_TIME: int = 10
 const ROUND_GROWTH: int = 5
@@ -11,7 +12,6 @@ const ENEMY_SPAWN_TIME_GROWTH: float = -.15
 @export var enemy_spawn_root: Node
 @export var spawn_rect: ReferenceRect
 
-var _round_count: int
 var round_count: int:
 	get:
 		return _round_count
@@ -19,6 +19,8 @@ var round_count: int:
 		_round_count = value
 		round_changed.emit(_round_count)
 var spawned_enemies: int
+
+var _round_count: int
 
 @onready var spawn_interval_timer: Timer = $SpawnIntervalTimer
 @onready var round_timer: Timer = $RoundTimer
@@ -79,7 +81,7 @@ func check_round_completed():
 		return
 	
 	if spawned_enemies == 0:
-		print("round complete")
+		round_completed.emit()
 		begin_round()
 
 

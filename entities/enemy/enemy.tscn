@@ -34,7 +34,15 @@ replication_config = SubResource("SceneReplicationConfig_im2q6")
 
 [node name="TargetAcquisitionTimer" type="Timer" parent="."]
 wait_time = 0.2
-autostart = true
+one_shot = true
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+
+[node name="ChargeAttackTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_3fvr7")]
 max_health = 2
@@ -61,5 +69,6 @@ shape = SubResource("CircleShape2D_ksmh7")
 position = Vector2(0, -10)
 collision_layer = 4
 
-[node name="Collision" type="CollisionShape2D" parent="HitboxComponent"]
+[node name="HitboxCollisionShape" type="CollisionShape2D" parent="HitboxComponent"]
+unique_name_in_owner = true
 shape = SubResource("RectangleShape2D_d50e0")

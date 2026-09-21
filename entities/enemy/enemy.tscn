@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dm0754lgs1m7u"]
+[gd_scene load_steps=12 format=3 uid="uid://dm0754lgs1m7u"]
 
 [ext_resource type="Script" uid="uid://b3m16r7ng73s1" path="res://entities/enemy/enemy.gd" id="1_im2q6"]
 [ext_resource type="Texture2D" uid="uid://cbsaisnil07vn" path="res://entities/enemy/enemy_medium.png" id="1_ksmh7"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dtcmhq7l4n15v" path="res://component/hurtbox_component.tscn" id="3_dt443"]
 [ext_resource type="Texture2D" uid="uid://b2vvbp8nulhpl" path="res://entities/enemy/attack_alert.png" id="4_d50e0"]
 [ext_resource type="PackedScene" uid="uid://bqimnq476igie" path="res://component/hitbox_component.tscn" id="5_4wwj3"]
+[ext_resource type="PackedScene" uid="uid://bhbhyubu1rf4x" path="res://component/hit_flash_sprite_component.tscn" id="5_61ikd"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_im2q6"]
 properties/0/path = NodePath(".:global_position")
@@ -64,10 +65,11 @@ texture = ExtResource("4_d50e0")
 
 [node name="Visuals" type="Node2D" parent="."]
 
-[node name="Texture" type="Sprite2D" parent="Visuals"]
+[node name="HitFlashSpriteComponent" parent="Visuals" node_paths=PackedStringArray("health_component") instance=ExtResource("5_61ikd")]
 texture = ExtResource("1_ksmh7")
 centered = false
 offset = Vector2(-8, -23)
+health_component = NodePath("../../HealthComponent")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -5)

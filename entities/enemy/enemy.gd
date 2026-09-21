@@ -11,6 +11,7 @@ var current_state: String:
 	set(value):
 		state_machine.change_state(Callable.create(self, value))
 var impact_particles_scene: PackedScene = preload("uid://wlikj6aovccc")
+var ground_particles_scene: PackedScene = preload("uid://cxwbdae8auvd8")
 
 @onready var target_acquisition_timer: Timer = $TargetAcquisitionTimer
 @onready var health_component: HealthComponent = $HealthComponent
@@ -163,7 +164,20 @@ func spawn_hit_particles():
 	get_parent().add_child(hit_particles)
 
 
+@rpc("authority", "call_local")
+func spawn_death_particles():
+	var death_particles: Node2D = ground_particles_scene.instantiate()
+	
+	var background_node: Node = Main.background_mask
+	if !is_instance_valid(background_node):
+		background_node = get_parent()
+	
+	background_node.add_child(death_particles)
+	death_particles.global_position = global_position
+
+
 func _on_died():
+	spawn_death_particles.rpc()
 	GameEvents.emit_enemy_died()
 	queue_free()
 

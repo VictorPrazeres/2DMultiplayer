@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwtumf0ncui6b"]
+[gd_scene load_steps=8 format=3 uid="uid://bwtumf0ncui6b"]
 
 [ext_resource type="Script" uid="uid://c5axiyf5qkt3a" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://ecb0nv0fgcv7" path="res://assets/arena.png" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://bs4y8iv7np8ub" path="res://manager/enemy_manager.tscn" id="2_h2yge"]
 [ext_resource type="PackedScene" uid="uid://d136jsptxend8" path="res://ui/game_ui/game_ui.tscn" id="3_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://c20fc352trn57" path="res://assets/clip_mask.png" id="5_lquwl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0xm2m"]
 size = Vector2(32, 300)
@@ -77,6 +78,14 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/StaticBody2D4"]
 shape = SubResource("RectangleShape2D_h2yge")
 metadata/_edit_lock_ = true
+
+[node name="BackgroundEffects" type="Node2D" parent="."]
+
+[node name="BackgroundMask" type="Sprite2D" parent="BackgroundEffects"]
+unique_name_in_owner = true
+clip_children = 1
+position = Vector2(320, 180)
+texture = ExtResource("5_lquwl")
 
 [node name="YSortRoot" type="Node2D" parent="."]
 y_sort_enabled = true

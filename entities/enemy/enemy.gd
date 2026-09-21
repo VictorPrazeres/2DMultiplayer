@@ -10,6 +10,7 @@ var current_state: String:
 		return state_machine.current_state
 	set(value):
 		state_machine.change_state(Callable.create(self, value))
+var impact_particles_scene: PackedScene = preload("uid://wlikj6aovccc")
 
 @onready var target_acquisition_timer: Timer = $TargetAcquisitionTimer
 @onready var health_component: HealthComponent = $HealthComponent
@@ -18,6 +19,7 @@ var current_state: String:
 @onready var charge_attack_timer: Timer = $ChargeAttackTimer
 @onready var hitbox_collision_shape: CollisionShape2D = %HitboxCollisionShape
 @onready var alert_sprite: Sprite2D = $AlertSprite
+@onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
 
 
 func _notification(what: int) -> void:
@@ -37,6 +39,7 @@ func _ready() -> void:
 	if is_multiplayer_authority():
 		health_component.died.connect(_on_died)
 		state_machine.set_initial_state(state_spawn)
+		hurtbox_component.hit_by_hitbox.connect(_on_hit_by_hitbox)
 
 
 func _process(_delta: float) -> void:
@@ -153,6 +156,17 @@ func acquire_target():
 		target_position = nearest_player.global_position
 
 
+@rpc("authority", "call_local")
+func spawn_hit_particles():
+	var hit_particles: Node2D = impact_particles_scene.instantiate()
+	hit_particles.global_position = hurtbox_component.global_position
+	get_parent().add_child(hit_particles)
+
+
 func _on_died():
 	GameEvents.emit_enemy_died()
 	queue_free()
+
+
+func _on_hit_by_hitbox():
+	spawn_hit_particles.rpc()

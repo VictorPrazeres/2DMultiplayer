@@ -14,20 +14,69 @@ theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 script = ExtResource("1_tvsvp")
 
-[node name="HContainer" type="HBoxContainer" parent="."]
+[node name="VContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_constants/separation = 16
 
-[node name="HostButton" type="Button" parent="HContainer"]
+[node name="VContainer" type="VBoxContainer" parent="VContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VContainer/VContainer"]
+layout_mode = 2
+text = "Display Name:"
+
+[node name="DisplayNameTextEdit" type="TextEdit" parent="VContainer/VContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Display name"
+scroll_fit_content_height = true
+
+[node name="HContainer" type="HBoxContainer" parent="VContainer"]
+layout_mode = 2
+
+[node name="VContainer" type="VBoxContainer" parent="VContainer/HContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VContainer/HContainer/VContainer"]
+layout_mode = 2
+text = "Port:"
+
+[node name="PortTextEdit" type="TextEdit" parent="VContainer/HContainer/VContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Host Port"
+scroll_fit_content_height = true
+
+[node name="HostButton" type="Button" parent="VContainer/HContainer/VContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Host"
 
-[node name="JoinButton" type="Button" parent="HContainer"]
+[node name="VContainer2" type="VBoxContainer" parent="VContainer/HContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VContainer/HContainer/VContainer2"]
+layout_mode = 2
+text = "IP Address:"
+
+[node name="IPAddressTextEdit" type="TextEdit" parent="VContainer/HContainer/VContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "IP Address"
+scroll_fit_content_height = true
+
+[node name="JoinButton" type="Button" parent="VContainer/HContainer/VContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Join"
 
 [node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0

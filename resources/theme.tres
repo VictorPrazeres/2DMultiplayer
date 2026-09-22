@@ -1,7 +1,8 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://c2l5xcwahbyc4"]
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://c2l5xcwahbyc4"]
 
 [ext_resource type="Texture2D" uid="uid://7iivgwv4pgm6" path="res://assets/ui/buttons.png" id="1_7ct1h"]
 [ext_resource type="FontFile" uid="uid://cnxdw1tvbqy2x" path="res://resources/font/KarenFat.ttf" id="1_d4nwg"]
+[ext_resource type="Texture2D" uid="uid://rtiyvap0xfwi" path="res://assets/ui/panel.png" id="2_886mr"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_owntx"]
 texture = ExtResource("1_7ct1h")
@@ -37,6 +38,13 @@ texture_margin_right = 4.0
 texture_margin_bottom = 5.0
 region_rect = Rect2(32, 2, 16, 16)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aaf3v"]
+texture = ExtResource("2_886mr")
+texture_margin_left = 4.0
+texture_margin_top = 5.0
+texture_margin_right = 4.0
+texture_margin_bottom = 5.0
+
 [resource]
 default_font = ExtResource("1_d4nwg")
 default_font_size = 16
@@ -49,3 +57,4 @@ Button/styles/focus = SubResource("StyleBoxEmpty_7ct1h")
 Button/styles/hover = SubResource("StyleBoxTexture_7ct1h")
 Button/styles/normal = SubResource("StyleBoxTexture_886mr")
 Button/styles/pressed = SubResource("StyleBoxTexture_b751m")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_aaf3v")

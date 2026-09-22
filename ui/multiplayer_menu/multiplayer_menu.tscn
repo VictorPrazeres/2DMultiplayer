@@ -83,3 +83,48 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Back"
+
+[node name="ErrorContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="MarginContainer" type="PanelContainer" parent="ErrorContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="ErrorContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VContainer" type="VBoxContainer" parent="ErrorContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ErrorContainer/MarginContainer/MarginContainer/VContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.129412, 0.592157, 0.941176, 1)
+text = "Error!"
+
+[node name="ClientErrorLabel" type="Label" parent="ErrorContainer/MarginContainer/MarginContainer/VContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.129412, 0.592157, 0.941176, 1)
+text = "An error occurred when connecting to the server."
+
+[node name="ServerErrorLabel" type="Label" parent="ErrorContainer/MarginContainer/MarginContainer/VContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.129412, 0.592157, 0.941176, 1)
+text = "An error occurred when creating the server."
+
+[node name="ErrorConfirmButton" type="Button" parent="ErrorContainer/MarginContainer/MarginContainer/VContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Ok"

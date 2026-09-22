@@ -48,6 +48,7 @@ text = "Port:"
 [node name="PortTextEdit" type="TextEdit" parent="VContainer/HContainer/VContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+text = "3000"
 placeholder_text = "Host Port"
 scroll_fit_content_height = true
 
@@ -67,6 +68,7 @@ text = "IP Address:"
 [node name="IPAddressTextEdit" type="TextEdit" parent="VContainer/HContainer/VContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
+text = "127.0.0.1"
 placeholder_text = "IP Address"
 scroll_fit_content_height = true
 

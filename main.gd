@@ -12,6 +12,7 @@ var player_dictionary: Dictionary[int, Player] = {}
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var player_spawn_position: Marker2D = $PlayerSpawnPosition
 @onready var enemy_manager: EnemyManager = $EnemyManager
+
 @onready var _background_effects: Node2D = $BackgroundEffects
 @onready var _background_mask: Sprite2D = %BackgroundMask
 

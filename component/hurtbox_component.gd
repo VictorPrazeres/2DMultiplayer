@@ -4,6 +4,7 @@ signal hit_by_hitbox
 
 @export var health_component: HealthComponent
 
+
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 

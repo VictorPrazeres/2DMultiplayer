@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dseen3ayqs7kc"]
+
+[ext_resource type="Script" uid="uid://ctc1lh44mivps" path="res://game_camera.gd" id="1_a63qp"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_a63qp"]
+noise_type = 3
+
+[node name="GameCamera" type="Camera2D"]
+script = ExtResource("1_a63qp")
+noise_texture = SubResource("FastNoiseLite_a63qp")
+shake_strength = 12.0

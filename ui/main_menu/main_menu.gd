@@ -4,13 +4,15 @@ const PORT: int = 3000
 
 var main_scene: PackedScene = preload("uid://bwtumf0ncui6b")
 
-@onready var host_button: Button = $HContainer/HostButton
-@onready var join_button: Button = $HContainer/JoinButton
+@onready var single_player_button: Button = $VContainer/SinglePlayerButton
+@onready var multiplayer_button: Button = $VContainer/MultiplayerButton
+@onready var quit_button: Button = $VContainer/QuitButton
 
 
 func _ready() -> void:
-	host_button.pressed.connect(_on_host_pressed)
-	join_button.pressed.connect(_on_join_pressed)
+	single_player_button.pressed.connect(_on_single_player_button_pressed)
+	multiplayer_button.pressed.connect(_on_multiplayer_button_pressed)
+	quit_button.pressed.connect(_on_quit_button_pressed)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 
 
@@ -29,3 +31,15 @@ func _on_join_pressed() -> void:
 
 func _on_connected_to_server():
 	get_tree().change_scene_to_packed(main_scene)
+
+
+func _on_single_player_button_pressed():
+	get_tree().change_scene_to_packed(main_scene)
+
+
+func _on_multiplayer_button_pressed():
+	pass
+
+
+func _on_quit_button_pressed():
+	get_tree().quit()

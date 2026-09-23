@@ -1,8 +1,6 @@
 extends MarginContainer
 
 var main_scene: PackedScene = preload("uid://bwtumf0ncui6b")
-var port_number: int
-var ip_address: String
 var is_connecting: bool
 
 @onready var display_name_text_edit: TextEdit = %DisplayNameTextEdit
@@ -30,6 +28,10 @@ func _ready() -> void:
 	ip_address_text_edit.text_changed.connect(_on_text_changed)
 	port_text_edit.text_changed.connect(_on_text_changed)
 	
+	display_name_text_edit.text = MultiplayerConfig.display_name
+	ip_address_text_edit.text = MultiplayerConfig.ip_address
+	port_text_edit.text = str(MultiplayerConfig.port)
+	
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	
@@ -39,21 +41,23 @@ func _ready() -> void:
 func validate():
 	var port := port_text_edit.text
 	if port.is_valid_int():
-		port_number = int(port)
-		if port_number <= 0:
-			port_number = -1
+		MultiplayerConfig.port = int(port)
+		if MultiplayerConfig.port <= 0:
+			MultiplayerConfig.port = -1
 	else:
-		port_number = -1
+		MultiplayerConfig.port = -1
 	
 	var ip := ip_address_text_edit.text
 	if ip.is_valid_ip_address():
-		ip_address = ip
+		MultiplayerConfig.ip_address = ip
 	else:
-		ip_address = ""
+		MultiplayerConfig.ip_address = ""
 	
-	var is_valid_port := port_number > 0
-	var is_valid_name := !display_name_text_edit.text.is_empty()
-	var is_valid_ip := !ip_address.is_empty()
+	MultiplayerConfig.display_name = display_name_text_edit.text
+	
+	var is_valid_port := MultiplayerConfig.port > 0
+	var is_valid_name := !MultiplayerConfig.display_name.is_empty()
+	var is_valid_ip := !MultiplayerConfig.ip_address.is_empty()
 	
 	host_button.disabled = is_connecting || !is_valid_port || !is_valid_name
 	join_button.disabled = is_connecting || !is_valid_port || !is_valid_name || !is_valid_ip
@@ -67,7 +71,7 @@ func show_error(is_client: bool):
 
 func _on_host_pressed() -> void:
 	var server_peer := ENetMultiplayerPeer.new()
-	var error := server_peer.create_server(port_number)
+	var error := server_peer.create_server(MultiplayerConfig.port)
 	
 	if error != Error.OK:
 		show_error(false)
@@ -79,7 +83,7 @@ func _on_host_pressed() -> void:
 
 func _on_join_pressed() -> void:
 	var client_peer := ENetMultiplayerPeer.new()
-	var error := client_peer.create_client(ip_address, port_number)
+	var error := client_peer.create_client(MultiplayerConfig.ip_address, MultiplayerConfig.port)
 	
 	if error != Error.OK:
 		show_error(true)

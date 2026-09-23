@@ -6,18 +6,21 @@ var bullet_scene: PackedScene = preload("uid://dp5836u66xfiw")
 var muzzle_flash_scene: PackedScene = preload("uid://bmaw6soihoeu7")
 var input_multiplayer_authority: int
 var is_dying: bool
+var display_name: String
 
 @onready var player_input_synchronizer_component: PlayerInputSynchronizerComponent = $PlayerInputSynchronizerComponent
 @onready var weapon_root: Node2D = $Visuals/WeaponRoot
+@onready var visuals: Node2D = $Visuals
 @onready var fire_rate_timer: Timer = $FireRateTimer
 @onready var health_component: HealthComponent = $HealthComponent
-@onready var visuals: Node2D = $Visuals
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var barrel_position: Marker2D = %BarrelPosition
+@onready var display_name_label: Label = $DisplayNameLabel
 
 
 func _ready() -> void:
 	player_input_synchronizer_component.set_multiplayer_authority(input_multiplayer_authority)
+	display_name_label.text = display_name
 	
 	if is_multiplayer_authority():
 		health_component.died.connect(_on_died)
@@ -34,6 +37,10 @@ func _process(_delta: float) -> void:
 		move_and_slide()
 		if player_input_synchronizer_component.is_attack_pressed:
 			try_fire()
+
+
+func set_display_name(incoming_name: String):
+	display_name = incoming_name
 
 
 func update_aim_position():

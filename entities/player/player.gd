@@ -20,7 +20,11 @@ var display_name: String
 
 func _ready() -> void:
 	player_input_synchronizer_component.set_multiplayer_authority(input_multiplayer_authority)
-	display_name_label.text = display_name
+	
+	if multiplayer.multiplayer_peer is OfflineMultiplayerPeer:
+		display_name_label.visible = false
+	else:
+		display_name_label.text = display_name
 	
 	if is_multiplayer_authority():
 		health_component.died.connect(_on_died)

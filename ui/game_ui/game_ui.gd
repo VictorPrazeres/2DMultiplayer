@@ -18,7 +18,11 @@ func _process(_delta: float) -> void:
 
 func connect_player(player: Player):
 	(func ():
-		display_name_label.text = player.display_name
+		if multiplayer.multiplayer_peer is OfflineMultiplayerPeer:
+			display_name_label.text = "Player"
+		else:
+			display_name_label.text = player.display_name
+		
 		player.health_component.health_changed.connect(_on_health_changed)
 		_on_health_changed(player.health_component.current_health, player.health_component.max_health)
 	).call_deferred()

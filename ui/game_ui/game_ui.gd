@@ -33,4 +33,4 @@ func _on_round_changed(round_count: int):
 
 
 func _on_health_changed(current_health: int, max_health: int):
-	health_progress_bar.value = float(current_health) / max_health if max_health != 0 else 0
+	health_progress_bar.value = float(current_health) / max_health if max_health != 0 else 0.0

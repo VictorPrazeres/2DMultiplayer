@@ -13,6 +13,7 @@ var player_name_dictionary: Dictionary[int, String] = {}
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var player_spawn_position: Marker2D = $PlayerSpawnPosition
 @onready var enemy_manager: EnemyManager = $EnemyManager
+@onready var game_ui: GameUI = $GameUI
 
 @onready var _background_effects: Node2D = $BackgroundEffects
 @onready var _background_mask: Sprite2D = %BackgroundMask
@@ -29,7 +30,12 @@ func _ready() -> void:
 		player.input_multiplayer_authority = data.peer_id
 		player.global_position = player_spawn_position.global_position
 		
+		if multiplayer.get_unique_id() == data.peer_id:
+			game_ui.connect_player(player)
+		
 		if is_multiplayer_authority():
+			if data.is_respawning:
+				player.is_respawn = true
 			player.died.connect(_on_player_died.bind(data.peer_id))
 		
 		player_dictionary[data.peer_id] = player
@@ -49,7 +55,8 @@ func peer_ready(display_name: String):
 	player_name_dictionary[sender_id] = display_name
 	multiplayer_spawner.spawn({
 		"peer_id": sender_id, 
-		"display_name": player_name_dictionary[sender_id]
+		"display_name": player_name_dictionary[sender_id],
+		"is_respawning": false
 	})
 	enemy_manager.synchronize(sender_id)
 
@@ -61,7 +68,8 @@ func respawn_dead_peers():
 			continue
 		multiplayer_spawner.spawn({
 			"peer_id": peer_id,
-			"display_name": player_name_dictionary[peer_id]
+			"display_name": player_name_dictionary[peer_id],
+			"is_respawning": true
 		})
 	dead_peers.clear()
 

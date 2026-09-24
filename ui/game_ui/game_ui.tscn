@@ -69,13 +69,16 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="MarginContainer/HContainer/VContainer"]
+[node name="DisplayNameLabel" type="Label" parent="MarginContainer/HContainer/VContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Player Name"
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/HContainer/VContainer"]
-custom_minimum_size = Vector2(0, 8)
+[node name="HealthProgressBar" type="ProgressBar" parent="MarginContainer/HContainer/VContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 8)
 layout_mode = 2
+size_flags_horizontal = 0
 mouse_filter = 2
 max_value = 1.0
 value = 0.5

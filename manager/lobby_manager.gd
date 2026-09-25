@@ -3,8 +3,14 @@ class_name LobbyManager extends Node
 signal all_peers_ready
 signal self_peer_ready
 signal lobby_closed
+signal peer_ready_states_changed(peers_ready: int, peers_total: int)
 
-var ready_peer_ids: Array[int] = []
+var ready_peer_ids: Array[int] = []:
+	get:
+		return _ready_peer_ids
+	set(value):
+		_ready_peer_ids = value
+		emit_peer_ready_states_changed()
 var is_lobby_closed: bool:
 	get:
 		return _is_lobby_closed
@@ -14,6 +20,7 @@ var is_lobby_closed: bool:
 			lobby_closed.emit()
 
 var _is_lobby_closed: bool
+var _ready_peer_ids: Array[int] = []
 
 
 func _ready() -> void:
@@ -22,6 +29,10 @@ func _ready() -> void:
 		
 	if multiplayer.multiplayer_peer is OfflineMultiplayerPeer:
 		all_peers_ready.emit.call_deferred()
+	
+	multiplayer.peer_connected.connect(_on_peer_connected)
+	
+	emit_peer_ready_states_changed.call_deferred()
 
 
 func _input(event: InputEvent) -> void:
@@ -34,13 +45,15 @@ func close_lobby():
 	is_lobby_closed = true
 
 
+func emit_peer_ready_states_changed():
+	var connected_peer_count: int = multiplayer.get_peers().size() + 1
+	peer_ready_states_changed.emit(ready_peer_ids.size(), connected_peer_count)
+
+
 @rpc("authority", "call_local", "reliable")
 func set_peer_ready(peer_id: int):
 	if peer_id == multiplayer.get_unique_id():
 		self_peer_ready.emit()
-	
-	if !ready_peer_ids.has(peer_id):
-		ready_peer_ids.append(peer_id)
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -49,6 +62,11 @@ func request_peer_ready():
 		return
 	
 	var sender_id := multiplayer.get_remote_sender_id()
+	
+	if !ready_peer_ids.has(sender_id):
+		ready_peer_ids.append(sender_id)
+		emit_peer_ready_states_changed()
+	
 	set_peer_ready.rpc(sender_id)
 	
 	try_all_peers_ready()
@@ -69,5 +87,18 @@ func check_all_peers_ready() -> bool:
 	return true
 
 
-func _on_peer_disconnected(_peer_id: int):
+func _on_peer_disconnected(peer_id: int):
+	if is_lobby_closed:
+		return
+	
+	if ready_peer_ids.has(peer_id):
+		ready_peer_ids.erase(peer_id)
+		emit_peer_ready_states_changed()
 	try_all_peers_ready()
+
+
+func _on_peer_connected(_peer_id: int):
+	if is_lobby_closed:
+		return
+	
+	emit_peer_ready_states_changed()

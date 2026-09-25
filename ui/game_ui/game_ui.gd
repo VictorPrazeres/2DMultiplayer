@@ -18,8 +18,11 @@ func _ready() -> void:
 	enemy_manager.round_changed.connect(_on_round_began)
 	lobby_manager.self_peer_ready.connect(_on_self_peer_ready)
 	lobby_manager.lobby_closed.connect(_on_lobby_closed)
-	ready_up_container.visible = true
-	round_info_container.visible = false
+	lobby_manager.peer_ready_states_changed.connect(_on_peer_ready_states_changed)
+	
+	var is_single_player := multiplayer.multiplayer_peer is OfflineMultiplayerPeer
+	ready_up_container.visible = !is_single_player
+	round_info_container.visible = is_single_player
 	ready_label.visible = false
 	not_ready_label.visible = true
 
@@ -56,3 +59,7 @@ func _on_self_peer_ready():
 func _on_lobby_closed():
 	ready_up_container.visible = false
 	round_info_container.visible = true
+
+
+func _on_peer_ready_states_changed(ready_count: int, total_count: int):
+	ready_count_label.text = "%s/%s READY" % [ready_count, total_count]

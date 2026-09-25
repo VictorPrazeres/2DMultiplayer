@@ -19,21 +19,48 @@ theme_override_constants/margin_left = 48
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 48
 
-[node name="VContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="ReadyUpContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="ReadyLabel" type="Label" parent="MarginContainer/ReadyUpContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0901961, 0.729412, 0.490196, 1)
+text = "READY"
+horizontal_alignment = 1
+
+[node name="NotReadyLabel" type="Label" parent="MarginContainer/ReadyUpContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+text = "NOT READY
+PRESS R TO READY UP"
+horizontal_alignment = 1
+
+[node name="ReadyCountLabel" type="Label" parent="MarginContainer/ReadyUpContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1/4 READY"
+horizontal_alignment = 1
+
+[node name="RoundInfoContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="RoundLabel" type="Label" parent="MarginContainer/VContainer"]
+[node name="RoundLabel" type="Label" parent="MarginContainer/RoundInfoContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 text = "Round 1"
 
-[node name="TimerLabel" type="Label" parent="MarginContainer/VContainer"]
+[node name="TimerLabel" type="Label" parent="MarginContainer/RoundInfoContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4

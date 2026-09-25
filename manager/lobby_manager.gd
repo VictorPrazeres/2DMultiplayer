@@ -1,9 +1,19 @@
 class_name LobbyManager extends Node
 
 signal all_peers_ready
+signal self_peer_ready
+signal lobby_closed
 
 var ready_peer_ids: Array[int] = []
-var is_lobby_closed: bool
+var is_lobby_closed: bool:
+	get:
+		return _is_lobby_closed
+	set(value):
+		_is_lobby_closed = value
+		if _is_lobby_closed:
+			lobby_closed.emit()
+
+var _is_lobby_closed: bool
 
 
 func _ready() -> void:
@@ -24,16 +34,24 @@ func close_lobby():
 	is_lobby_closed = true
 
 
+@rpc("authority", "call_local", "reliable")
+func set_peer_ready(peer_id: int):
+	if peer_id == multiplayer.get_unique_id():
+		self_peer_ready.emit()
+	
+	if !ready_peer_ids.has(peer_id):
+		ready_peer_ids.append(peer_id)
+
+
 @rpc("any_peer", "call_local", "reliable")
 func request_peer_ready():
 	if !is_multiplayer_authority() || is_lobby_closed:
 		return
 	
 	var sender_id := multiplayer.get_remote_sender_id()
-	if !ready_peer_ids.has(sender_id):
-		ready_peer_ids.append(sender_id)
-		
-		try_all_peers_ready()
+	set_peer_ready.rpc(sender_id)
+	
+	try_all_peers_ready()
 
 
 func try_all_peers_ready():

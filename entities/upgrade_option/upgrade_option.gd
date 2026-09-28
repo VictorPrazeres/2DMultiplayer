@@ -1,0 +1,1 @@
+class_name UpgradeOption extends Node2D

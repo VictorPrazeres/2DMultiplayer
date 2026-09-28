@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bwtumf0ncui6b"]
+[gd_scene load_steps=12 format=3 uid="uid://bwtumf0ncui6b"]
 
 [ext_resource type="Script" uid="uid://c5axiyf5qkt3a" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://ecb0nv0fgcv7" path="res://assets/arena.png" id="2_0xm2m"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c4bjdwwk14n8f" path="res://manager/lobby_manager.tscn" id="3_5vw27"]
 [ext_resource type="PackedScene" uid="uid://dseen3ayqs7kc" path="res://game_camera.tscn" id="4_7mycd"]
 [ext_resource type="PackedScene" uid="uid://dm7uutkn2enbw" path="res://ui/pause_menu/pause_menu.tscn" id="4_272bh"]
+[ext_resource type="PackedScene" uid="uid://c33vdugirpjqk" path="res://manager/upgrade_manager.tscn" id="4_kek77"]
 [ext_resource type="Texture2D" uid="uid://c20fc352trn57" path="res://assets/clip_mask.png" id="5_lquwl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0xm2m"]
@@ -24,6 +25,11 @@ spawn_rect = NodePath("../SpawnRect")
 
 [node name="LobbyManager" parent="." instance=ExtResource("3_5vw27")]
 
+[node name="UpgradeManager" parent="." node_paths=PackedStringArray("enemy_manager", "spawn_position", "spawn_root") instance=ExtResource("4_kek77")]
+enemy_manager = NodePath("../EnemyManager")
+spawn_position = NodePath("../CenterPosition")
+spawn_root = NodePath("../YSortRoot")
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://dp5836u66xfiw", "uid://dm0754lgs1m7u")
 spawn_path = NodePath("../YSortRoot")
@@ -38,7 +44,7 @@ visible = false
 [node name="GameCamera" parent="." instance=ExtResource("4_7mycd")]
 position = Vector2(320, 180)
 
-[node name="PlayerSpawnPosition" type="Marker2D" parent="."]
+[node name="CenterPosition" type="Marker2D" parent="."]
 position = Vector2(320, 185)
 metadata/_edit_lock_ = true
 

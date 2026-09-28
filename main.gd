@@ -11,7 +11,7 @@ var player_dictionary: Dictionary[int, Player] = {}
 var player_name_dictionary: Dictionary[int, String] = {}
 
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
-@onready var player_spawn_position: Marker2D = $PlayerSpawnPosition
+@onready var center_position: Marker2D = $CenterPosition
 @onready var enemy_manager: EnemyManager = $EnemyManager
 @onready var game_ui: GameUI = $GameUI
 @onready var pause_menu: PauseMenu = $PauseMenu
@@ -30,7 +30,7 @@ func _ready() -> void:
 		player.set_display_name(data.display_name)
 		player.name = str(data.peer_id)
 		player.input_multiplayer_authority = data.peer_id
-		player.global_position = player_spawn_position.global_position
+		player.global_position = center_position.global_position
 		
 		if multiplayer.get_unique_id() == data.peer_id:
 			game_ui.connect_player(player)

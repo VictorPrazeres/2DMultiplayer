@@ -85,12 +85,10 @@ func check_round_completed():
 		return
 	
 	if spawned_enemies == 0:
-		round_completed.emit()
-		
 		if round_count == MAX_ROUNDS:
 			complete_game()
 		else:
-			begin_round()
+			round_completed.emit()
 
 
 func complete_game():

@@ -67,6 +67,7 @@ func try_fire():
 	
 	var bullet = bullet_scene.instantiate() as Bullet
 	bullet.global_position = barrel_position.global_position
+	bullet.source_peer_id = player_input_synchronizer_component.get_multiplayer_authority()
 	bullet.start(player_input_synchronizer_component.aim_vector)
 	get_parent().add_child(bullet, true)
 	fire_rate_timer.start()

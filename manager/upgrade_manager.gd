@@ -9,21 +9,24 @@ static var instance: UpgradeManager
 
 var upgrade_option_scene: PackedScene = preload("uid://ct03qmkkn8y56")
 var peer_id_to_upgrade_options: Dictionary[int, Array] = {}
-var peer_id_to_upgrades_acquired: Dictionary[int, Array] = {}
+var peer_id_to_upgrades_acquired: Dictionary[int, Dictionary] = {}
+
+
+static func get_peer_upgrade_count(peer_id: int, upgrade_id: String) -> int:
+	if !is_instance_valid(instance):
+		return 0
+	
+	if !instance.peer_id_to_upgrades_acquired.has(peer_id):
+		return 0
+	
+	if !instance.peer_id_to_upgrades_acquired[peer_id].has(upgrade_id):
+		return 0
+	
+	return instance.peer_id_to_upgrades_acquired[peer_id][upgrade_id]
 
 
 static func peer_has_upgrade(peer_id: int, upgrade_id: String) -> bool:
-	if !is_instance_valid(instance):
-		return false
-	
-	if !instance.peer_id_to_upgrades_acquired.has(peer_id):
-		return false
-	
-	var index := instance.peer_id_to_upgrades_acquired[peer_id].find_custom(func (item):
-		return item.id == upgrade_id
-	)
-	
-	return index > -1
+	return get_peer_upgrade_count(peer_id, upgrade_id) > 0
 
 
 func _ready() -> void:
@@ -98,11 +101,16 @@ func set_upgrade_options(selected_upgrades: Array):
 
 func handle_upgrade_selected(upgrade_index: int, for_peer_id: int):
 	if !peer_id_to_upgrades_acquired.has(for_peer_id):
-		peer_id_to_upgrades_acquired[for_peer_id] = []
+		peer_id_to_upgrades_acquired[for_peer_id] = {}
 	
-	var upgrade_array := peer_id_to_upgrades_acquired[for_peer_id]
+	var upgrade_dictionary := peer_id_to_upgrades_acquired[for_peer_id]
 	var chosen_upgrade = peer_id_to_upgrade_options[for_peer_id][upgrade_index]
-	upgrade_array.append(chosen_upgrade)
+	
+	var upgrade_count: int = 0
+	if upgrade_dictionary.has(chosen_upgrade.id):
+		upgrade_count = upgrade_dictionary[chosen_upgrade.id]
+	
+	upgrade_dictionary[chosen_upgrade.id] = upgrade_count + 1
 	
 	print("Peer %s has selected upgrade with id %s" % [
 		for_peer_id,

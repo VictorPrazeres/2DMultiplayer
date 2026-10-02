@@ -3,6 +3,8 @@ class_name Player extends CharacterBody2D
 signal died
 
 const BASE_MOVEMENT_SPEED: float = 100
+const BASE_FIRE_RATE: float = .25
+const BASE_DAMAGE_BULLET: int = 1
 
 var bullet_scene: PackedScene = preload("uid://dp5836u66xfiw")
 var muzzle_flash_scene: PackedScene = preload("uid://bmaw6soihoeu7")
@@ -52,12 +54,32 @@ func _process(_delta: float) -> void:
 
 
 func get_movement_speed() -> float:
-	var has_movement_upgrade := UpgradeManager.peer_has_upgrade(
+	var movement_upgrade_count := UpgradeManager.get_peer_upgrade_count(
 		player_input_synchronizer_component.get_multiplayer_authority(),
 		"movement_speed"
 	)
 	
-	return BASE_MOVEMENT_SPEED if !has_movement_upgrade else BASE_MOVEMENT_SPEED * 1.15
+	var speed_modifier := 1 + (.15 * movement_upgrade_count)
+	
+	return BASE_MOVEMENT_SPEED * speed_modifier
+
+
+func get_fire_rate() -> float:
+	var fire_rate_count := UpgradeManager.get_peer_upgrade_count(
+		player_input_synchronizer_component.get_multiplayer_authority(),
+		"fire_rate"
+	)
+	
+	return BASE_FIRE_RATE * (1 - (.1 * fire_rate_count))
+
+
+func get_bullet_damage() -> int:
+	var damage_count := UpgradeManager.get_peer_upgrade_count(
+		player_input_synchronizer_component.get_multiplayer_authority(),
+		"damage"
+	)
+	
+	return BASE_DAMAGE_BULLET + damage_count
 
 
 func set_display_name(incoming_name: String):
@@ -77,10 +99,13 @@ func try_fire():
 		return
 	
 	var bullet = bullet_scene.instantiate() as Bullet
+	bullet.damage = get_bullet_damage()
 	bullet.global_position = barrel_position.global_position
 	bullet.source_peer_id = player_input_synchronizer_component.get_multiplayer_authority()
 	bullet.start(player_input_synchronizer_component.aim_vector)
 	get_parent().add_child(bullet, true)
+	
+	fire_rate_timer.wait_time = get_fire_rate()
 	fire_rate_timer.start()
 	
 	play_fire_effects.rpc()

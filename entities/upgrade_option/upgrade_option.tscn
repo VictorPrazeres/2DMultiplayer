@@ -1,11 +1,147 @@
-[gd_scene load_steps=6 format=3 uid="uid://ct03qmkkn8y56"]
+[gd_scene load_steps=12 format=3 uid="uid://ct03qmkkn8y56"]
 
 [ext_resource type="PackedScene" uid="uid://dtcmhq7l4n15v" path="res://component/hurtbox_component.tscn" id="1_l34ok"]
 [ext_resource type="PackedScene" uid="uid://b5k0c38me5gwc" path="res://component/health_component.tscn" id="1_mdpbk"]
 [ext_resource type="Script" uid="uid://dh0dsjrj8nqtg" path="res://entities/upgrade_option/upgrade_option.gd" id="1_yuvji"]
+[ext_resource type="Texture2D" uid="uid://3wox8hqhare7" path="res://assets/upgrade/upgrade_option.png" id="3_34j1a"]
+[ext_resource type="PackedScene" uid="uid://bhbhyubu1rf4x" path="res://component/hit_flash_sprite_component.tscn" id="5_jncuo"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hhmkk"]
-size = Vector2(16, 16)
+[sub_resource type="Animation" id="Animation_jncuo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitFlashSpriteComponent:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitFlashSpriteComponent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -16)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HurtboxComponent/Collision:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_27yqu"]
+resource_name = "despawn"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitFlashSpriteComponent:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.9, 0.9), Vector2(1.5, 1.5), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HurtboxComponent/Collision:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_xoods"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitFlashSpriteComponent:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitFlashSpriteComponent:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -16), Vector2(0, -20)]
+}
+
+[sub_resource type="Animation" id="Animation_34j1a"]
+resource_name = "spawn"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitFlashSpriteComponent:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1.5, 1.5), Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xoods"]
+_data = {
+&"RESET": SubResource("Animation_jncuo"),
+&"despawn": SubResource("Animation_27yqu"),
+&"idle": SubResource("Animation_xoods"),
+&"spawn": SubResource("Animation_34j1a")
+}
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_l34ok"]
 radius = 8.0
@@ -13,14 +149,23 @@ radius = 8.0
 [node name="UpgradeOption" type="Node2D" groups=["upgrade_option"]]
 script = ExtResource("1_yuvji")
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_xoods")
+}
+next/spawn = &"idle"
+
 [node name="HealthComponent" parent="." instance=ExtResource("1_mdpbk")]
 max_health = 10
 
-[node name="Texture" type="Sprite2D" parent="."]
-texture = SubResource("PlaceholderTexture2D_hhmkk")
-
 [node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("1_l34ok")]
+position = Vector2(0, -16)
 health_component = NodePath("../HealthComponent")
 
 [node name="Collision" type="CollisionShape2D" parent="HurtboxComponent"]
 shape = SubResource("CircleShape2D_l34ok")
+
+[node name="HitFlashSpriteComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("5_jncuo")]
+position = Vector2(0, -16)
+texture = ExtResource("3_34j1a")
+health_component = NodePath("../HealthComponent")

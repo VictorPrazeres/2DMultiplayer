@@ -3,24 +3,40 @@ class_name UpgradeOption extends Node2D
 signal selected(index: int, for_peer_id: int)
 
 var upgrade_index: int
-var peer_id_filter: int
+var peer_id_filter: int = -1
 var assigned_resource: UpgradeResource
+var impact_particles_scene: PackedScene = preload("uid://wlikj6aovccc")
+var ground_particles_scene: PackedScene = preload("uid://cxwbdae8auvd8")
 
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var hit_flash_sprite_component: Sprite2D = $HitFlashSpriteComponent
 
 
 func _ready() -> void:
-	hurtbox_component.peer_id_filter = peer_id_filter
+	set_peer_id_filter(peer_id_filter)
+	hurtbox_component.hit_by_hitbox.connect(_on_hit_by_hitbox)
 	health_component.died.connect(_on_died)
 	
 	if is_multiplayer_authority():
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 
+func play_in(delay: float = 0):
+	hit_flash_sprite_component.scale = Vector2.ZERO
+	
+	var tween := create_tween()
+	tween.tween_interval(delay)
+	tween.tween_callback(func():
+		animation_player.play("spawn")
+	)
+
+
 func set_peer_id_filter(new_peer_id: int):
 	peer_id_filter = new_peer_id
 	hurtbox_component.peer_id_filter = peer_id_filter
+	hit_flash_sprite_component.peer_id_filter = peer_id_filter
 
 
 func set_upgrade_index(index: int):
@@ -32,26 +48,56 @@ func set_upgrade_resource(upgrade_resource: UpgradeResource):
 
 
 func kill():
+	spawn_death_particles()
 	queue_free()
 
 
+func spawn_death_particles():
+	var death_particles: Node2D = ground_particles_scene.instantiate()
+	
+	var background_node: Node = Main.background_mask
+	if !is_instance_valid(background_node):
+		background_node = get_parent()
+	
+	background_node.add_child(death_particles)
+	death_particles.global_position = global_position
+
+
+func despawn():
+	animation_player.play("despawn")
+
+
+@rpc("authority", "call_local")
+func spawn_hit_particles():
+	var hit_particles: Node2D = impact_particles_scene.instantiate()
+	hit_particles.global_position = hurtbox_component.global_position
+	get_parent().add_child(hit_particles)
+
+
 @rpc("authority", "call_local", "reliable")
-func kill_all():
+func kill_all(killed_name: String):
 	var upgrade_option_nodes := get_tree().get_nodes_in_group("upgrade_option")
 	
 	for upgrade_option in upgrade_option_nodes:
 		if upgrade_option.peer_id_filter == peer_id_filter:
-			upgrade_option.kill()
+			if upgrade_option.name == killed_name:
+				upgrade_option.kill()
+			else:
+				upgrade_option.despawn()
 
 
 func _on_died():
 	selected.emit(upgrade_index, peer_id_filter)
-	kill_all.rpc_id(MultiplayerPeer.TARGET_PEER_SERVER)
+	kill_all.rpc_id(MultiplayerPeer.TARGET_PEER_SERVER, name)
 	
 	if peer_id_filter != MultiplayerPeer.TARGET_PEER_SERVER:
-		kill_all.rpc_id(peer_id_filter)
+		kill_all.rpc_id(peer_id_filter, name)
 
 
 func _on_peer_disconnected(peer_id: int):
 	if peer_id == peer_id_filter:
-		kill()
+		despawn()
+
+
+func _on_hit_by_hitbox():
+	spawn_hit_particles.rpc_id(peer_id_filter)

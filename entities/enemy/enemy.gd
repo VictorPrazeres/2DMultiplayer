@@ -13,14 +13,14 @@ var current_state: String:
 var impact_particles_scene: PackedScene = preload("uid://wlikj6aovccc")
 var ground_particles_scene: PackedScene = preload("uid://cxwbdae8auvd8")
 
-@onready var target_acquisition_timer: Timer = $TargetAcquisitionTimer
 @onready var health_component: HealthComponent = $HealthComponent
-@onready var visuals: Node2D = $Visuals
+@onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
+@onready var target_acquisition_timer: Timer = $TargetAcquisitionTimer
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var charge_attack_timer: Timer = $ChargeAttackTimer
 @onready var hitbox_collision_shape: CollisionShape2D = %HitboxCollisionShape
 @onready var alert_sprite: Sprite2D = $AlertSprite
-@onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
+@onready var visuals: Node2D = $Visuals
 
 
 func _notification(what: int) -> void:

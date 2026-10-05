@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dm0754lgs1m7u"]
+[gd_scene load_steps=17 format=3 uid="uid://dm0754lgs1m7u"]
 
 [ext_resource type="Script" uid="uid://b3m16r7ng73s1" path="res://entities/enemy/enemy.gd" id="1_im2q6"]
 [ext_resource type="Texture2D" uid="uid://cbsaisnil07vn" path="res://entities/enemy/enemy_medium.png" id="1_ksmh7"]
@@ -8,6 +8,44 @@
 [ext_resource type="PackedScene" uid="uid://bqimnq476igie" path="res://component/hitbox_component.tscn" id="5_4wwj3"]
 [ext_resource type="PackedScene" uid="uid://bhbhyubu1rf4x" path="res://component/hit_flash_sprite_component.tscn" id="5_61ikd"]
 [ext_resource type="Shader" uid="uid://cr17hfwmypsov" path="res://resources/shader/hit_flash.gdshader" id="6_721x4"]
+
+[sub_resource type="Animation" id="Animation_721x4"]
+resource_name = "run"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/HitFlashSpriteComponent:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 0.8), Vector2(0.8, 1.2)]
+}
+
+[sub_resource type="Animation" id="Animation_eaj7m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/HitFlashSpriteComponent:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a8fs5"]
+_data = {
+&"RESET": SubResource("Animation_eaj7m"),
+&"run": SubResource("Animation_721x4")
+}
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_im2q6"]
 properties/0/path = NodePath(".:global_position")
@@ -39,6 +77,12 @@ collision_layer = 2
 collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_im2q6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_a8fs5")
+}
+speed_scale = 0.5
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_im2q6")

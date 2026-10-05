@@ -18,6 +18,7 @@ var display_name: String
 @onready var visuals: Node2D = $Visuals
 @onready var fire_rate_timer: Timer = $FireRateTimer
 @onready var health_component: HealthComponent = $HealthComponent
+@onready var weapon_animation_player: AnimationPlayer = $WeaponAnimationPlayer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var barrel_position: Marker2D = %BarrelPosition
 @onready var display_name_label: Label = $DisplayNameLabel
@@ -44,15 +45,23 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	update_aim_position()
+	
+	var movement_vector := player_input_synchronizer_component.movement_vector
 	if is_multiplayer_authority():
 		if is_dying:
 			global_position = Vector2.RIGHT * 1000
 			return
 	
-		velocity = player_input_synchronizer_component.movement_vector * get_movement_speed()
+		velocity = movement_vector * get_movement_speed()
 		move_and_slide()
+	
 		if player_input_synchronizer_component.is_attack_pressed:
 			try_fire()
+	
+	if is_equal_approx(movement_vector.length_squared(), 0):
+		animation_player.play("RESET")
+	else:
+		animation_player.play("run")
 
 
 func get_movement_speed() -> float:
@@ -115,9 +124,9 @@ func try_fire():
 
 @rpc("authority", "call_local", "unreliable")
 func play_fire_effects():
-	if animation_player.is_playing():
-		animation_player.stop()
-	animation_player.play("fire")
+	if weapon_animation_player.is_playing():
+		weapon_animation_player.stop()
+	weapon_animation_player.play("fire")
 	
 	var muzzle_flash: Node2D = muzzle_flash_scene.instantiate()
 	muzzle_flash.global_position = barrel_position.global_position

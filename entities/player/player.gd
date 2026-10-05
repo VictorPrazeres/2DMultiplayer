@@ -43,7 +43,7 @@ func _ready() -> void:
 		health_component.died.connect(_on_died)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	update_aim_position()
 	
 	var movement_vector := player_input_synchronizer_component.movement_vector
@@ -52,7 +52,8 @@ func _process(_delta: float) -> void:
 			global_position = Vector2.RIGHT * 1000
 			return
 	
-		velocity = movement_vector * get_movement_speed()
+		var target_velocity = movement_vector * get_movement_speed()
+		velocity = velocity.lerp(target_velocity, 1 - exp(-25 * delta))
 		move_and_slide()
 	
 		if player_input_synchronizer_component.is_attack_pressed:

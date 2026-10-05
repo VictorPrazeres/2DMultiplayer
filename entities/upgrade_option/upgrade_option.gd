@@ -12,12 +12,20 @@ var ground_particles_scene: PackedScene = preload("uid://cxwbdae8auvd8")
 @onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_flash_sprite_component: Sprite2D = $HitFlashSpriteComponent
+@onready var player_detection_area: Area2D = $PlayerDetectionArea
+@onready var info_container: VBoxContainer = $InfoContainer
+@onready var title_label: Label = %TitleLabel
+@onready var description_label: Label = %DescriptionLabel
 
 
 func _ready() -> void:
+	update_info()
+	info_container.visible = false
 	set_peer_id_filter(peer_id_filter)
 	hurtbox_component.hit_by_hitbox.connect(_on_hit_by_hitbox)
 	health_component.died.connect(_on_died)
+	player_detection_area.area_entered.connect(_on_player_detection_area_entered)
+	player_detection_area.area_exited.connect(_on_player_detection_area_exited)
 	
 	if is_multiplayer_authority():
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -45,6 +53,18 @@ func set_upgrade_index(index: int):
 
 func set_upgrade_resource(upgrade_resource: UpgradeResource):
 	assigned_resource = upgrade_resource
+	update_info()
+
+
+func update_info():
+	if !is_instance_valid(title_label) || !is_instance_valid(description_label):
+		return
+	
+	if assigned_resource == null:
+		return
+	
+	title_label.text = assigned_resource.display_name
+	description_label.text = assigned_resource.description
 
 
 func kill():
@@ -101,3 +121,11 @@ func _on_peer_disconnected(peer_id: int):
 
 func _on_hit_by_hitbox():
 	spawn_hit_particles.rpc_id(peer_id_filter)
+
+
+func _on_player_detection_area_entered(_other_area: Area2D):
+	info_container.visible = true
+
+
+func _on_player_detection_area_exited(_other_are: Area2D):
+	info_container.visible = false

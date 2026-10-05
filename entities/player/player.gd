@@ -21,10 +21,12 @@ var display_name: String
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var barrel_position: Marker2D = %BarrelPosition
 @onready var display_name_label: Label = $DisplayNameLabel
+@onready var activation_area_collision_shape: CollisionShape2D = %ActivationAreaCollisionShape
 
 
 func _ready() -> void:
 	player_input_synchronizer_component.set_multiplayer_authority(input_multiplayer_authority)
+	activation_area_collision_shape.disabled = !player_input_synchronizer_component.is_multiplayer_authority()
 	
 	var is_single_player = multiplayer.multiplayer_peer is OfflineMultiplayerPeer
 	var is_client_authority = player_input_synchronizer_component.is_multiplayer_authority()

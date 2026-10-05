@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://ct03qmkkn8y56"]
+[gd_scene load_steps=15 format=3 uid="uid://ct03qmkkn8y56"]
 
 [ext_resource type="PackedScene" uid="uid://dtcmhq7l4n15v" path="res://component/hurtbox_component.tscn" id="1_l34ok"]
 [ext_resource type="PackedScene" uid="uid://b5k0c38me5gwc" path="res://component/health_component.tscn" id="1_mdpbk"]
 [ext_resource type="Script" uid="uid://dh0dsjrj8nqtg" path="res://entities/upgrade_option/upgrade_option.gd" id="1_yuvji"]
 [ext_resource type="Texture2D" uid="uid://3wox8hqhare7" path="res://assets/upgrade/upgrade_option.png" id="3_34j1a"]
 [ext_resource type="PackedScene" uid="uid://bhbhyubu1rf4x" path="res://component/hit_flash_sprite_component.tscn" id="5_jncuo"]
+[ext_resource type="Shader" uid="uid://cr17hfwmypsov" path="res://resources/shader/hit_flash.gdshader" id="5_xoods"]
 
 [sub_resource type="Animation" id="Animation_jncuo"]
 length = 0.001
@@ -146,6 +147,14 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_l34ok"]
 radius = 8.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_xoods"]
+radius = 32.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_27yqu"]
+resource_local_to_scene = true
+shader = ExtResource("5_xoods")
+shader_parameter/percent = 0.0
+
 [node name="UpgradeOption" type="Node2D" groups=["upgrade_option"]]
 script = ExtResource("1_yuvji")
 
@@ -165,7 +174,49 @@ health_component = NodePath("../HealthComponent")
 [node name="Collision" type="CollisionShape2D" parent="HurtboxComponent"]
 shape = SubResource("CircleShape2D_l34ok")
 
+[node name="PlayerDetectionArea" type="Area2D" parent="."]
+position = Vector2(0, -16)
+collision_layer = 0
+collision_mask = 8
+
+[node name="Collision" type="CollisionShape2D" parent="PlayerDetectionArea"]
+shape = SubResource("CircleShape2D_xoods")
+
 [node name="HitFlashSpriteComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("5_jncuo")]
+material = SubResource("ShaderMaterial_27yqu")
 position = Vector2(0, -16)
 texture = ExtResource("3_34j1a")
 health_component = NodePath("../HealthComponent")
+
+[node name="InfoContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(192, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -80.0
+offset_right = 96.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="TitleLabel" type="Label" parent="InfoContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.831373, 0.172549, 0.309804, 1)
+theme_override_constants/outline_size = 4
+text = "Example Title"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="InfoContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+text = "Example Description"
+horizontal_alignment = 1
+autowrap_mode = 2

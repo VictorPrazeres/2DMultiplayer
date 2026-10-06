@@ -12,6 +12,12 @@ func _ready() -> void:
 	single_player_button.pressed.connect(_on_single_player_button_pressed)
 	multiplayer_button.pressed.connect(_on_multiplayer_button_pressed)
 	quit_button.pressed.connect(_on_quit_button_pressed)
+	
+	UIAudioManager.register_buttons([
+		single_player_button,
+		multiplayer_button,
+		quit_button
+	])
 
 
 func _on_single_player_button_pressed():

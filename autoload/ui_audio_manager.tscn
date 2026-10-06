@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bttt703q60wua"]
+
+[ext_resource type="Script" uid="uid://b7t8katisxdtm" path="res://autoload/ui_audio_manager.gd" id="1_knglf"]
+[ext_resource type="AudioStream" uid="uid://do4ctpkryspk6" path="res://assets/audio/button.wav" id="2_mv3kq"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_knglf"]
+random_pitch = 1.1
+random_volume_offset_db = 2.0
+streams_count = 1
+stream_0/stream = ExtResource("2_mv3kq")
+
+[node name="UIAudioManager" type="Node"]
+script = ExtResource("1_knglf")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_knglf")
+volume_db = -2.0
+bus = &"sfx"

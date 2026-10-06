@@ -1,11 +1,22 @@
-[gd_scene load_steps=17 format=3 uid="uid://cjqc31ns8shcp"]
+[gd_scene load_steps=30 format=3 uid="uid://cjqc31ns8shcp"]
 
 [ext_resource type="Script" uid="uid://3k7mrumbq40m" path="res://entities/player/player.gd" id="1_symyc"]
 [ext_resource type="PackedScene" uid="uid://c7tnietnej0fv" path="res://component/player_input_synchronizer_component.tscn" id="2_abrql"]
 [ext_resource type="PackedScene" uid="uid://b5k0c38me5gwc" path="res://component/health_component.tscn" id="3_fkugw"]
+[ext_resource type="AudioStream" uid="uid://c323ltqdi4koe" path="res://assets/audio/shot_1.wav" id="3_j3ovn"]
 [ext_resource type="Texture2D" uid="uid://b6666ae3uwiw" path="res://entities/player/player-medium.png" id="3_sglur"]
 [ext_resource type="PackedScene" uid="uid://dtcmhq7l4n15v" path="res://component/hurtbox_component.tscn" id="4_8fjmc"]
+[ext_resource type="AudioStream" uid="uid://nl6vxa7cxnw5" path="res://assets/audio/shot_2.wav" id="4_afbqv"]
 [ext_resource type="Texture2D" uid="uid://cal60ved6wkuv" path="res://entities/player/rifle.png" id="4_bls4j"]
+[ext_resource type="AudioStream" uid="uid://bbaut61x7xauf" path="res://assets/audio/shot_3.wav" id="5_gx6sm"]
+[ext_resource type="AudioStream" uid="uid://i8cwyl7aq8ns" path="res://assets/audio/shot_4.wav" id="6_yqrof"]
+[ext_resource type="AudioStream" uid="uid://co7q3ujvpuwtp" path="res://assets/audio/shot_5.wav" id="7_3wlsy"]
+[ext_resource type="AudioStream" uid="uid://cf3q31ddtuohh" path="res://assets/audio/shot_6.wav" id="8_b2kln"]
+[ext_resource type="AudioStream" uid="uid://djtj2psxvj3cp" path="res://assets/audio/shot_7.wav" id="9_we0b7"]
+[ext_resource type="AudioStream" uid="uid://c71gv6xqh4vbs" path="res://assets/audio/hit_1.wav" id="11_3wlsy"]
+[ext_resource type="AudioStream" uid="uid://6y1ewfvlb168" path="res://assets/audio/hit_2.wav" id="12_b2kln"]
+[ext_resource type="AudioStream" uid="uid://dlyqtpvaswvbk" path="res://assets/audio/hit_3.wav" id="13_we0b7"]
+[ext_resource type="AudioStream" uid="uid://yjlxawbj5aey" path="res://assets/audio/hit_4.wav" id="14_mtric"]
 
 [sub_resource type="Animation" id="Animation_qiwj3"]
 length = 0.001
@@ -116,6 +127,27 @@ properties/1/path = NodePath("HealthComponent:current_health")
 properties/1/spawn = true
 properties/1/replication_mode = 2
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_mtric"]
+random_pitch = 1.1
+random_volume_offset_db = 2.0
+streams_count = 7
+stream_0/stream = ExtResource("3_j3ovn")
+stream_1/stream = ExtResource("4_afbqv")
+stream_2/stream = ExtResource("5_gx6sm")
+stream_3/stream = ExtResource("6_yqrof")
+stream_4/stream = ExtResource("7_3wlsy")
+stream_5/stream = ExtResource("8_b2kln")
+stream_6/stream = ExtResource("9_we0b7")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_eyb6c"]
+random_pitch = 1.1
+random_volume_offset_db = 2.0
+streams_count = 4
+stream_0/stream = ExtResource("11_3wlsy")
+stream_1/stream = ExtResource("12_b2kln")
+stream_2/stream = ExtResource("13_we0b7")
+stream_3/stream = ExtResource("14_mtric")
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_qiwj3"]
 radius = 16.0
 
@@ -146,12 +178,24 @@ aim_root = NodePath("../Visuals/WeaponRoot")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_abrql")
 
+[node name="WeaponStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_mtric")
+volume_db = -2.0
+max_polyphony = 3
+bus = &"sfx"
+
 [node name="HealthComponent" parent="." instance=ExtResource("3_fkugw")]
 max_health = 5
 
 [node name="FireRateTimer" type="Timer" parent="."]
 wait_time = 0.25
 one_shot = true
+
+[node name="HitStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_eyb6c")
+volume_db = -2.0
+max_polyphony = 3
+bus = &"sfx"
 
 [node name="ActivationArea" type="Area2D" parent="."]
 position = Vector2(0, -9)

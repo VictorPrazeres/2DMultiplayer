@@ -1,13 +1,17 @@
-[gd_scene load_steps=17 format=3 uid="uid://dm0754lgs1m7u"]
+[gd_scene load_steps=22 format=3 uid="uid://dm0754lgs1m7u"]
 
 [ext_resource type="Script" uid="uid://b3m16r7ng73s1" path="res://entities/enemy/enemy.gd" id="1_im2q6"]
 [ext_resource type="Texture2D" uid="uid://cbsaisnil07vn" path="res://entities/enemy/enemy_medium.png" id="1_ksmh7"]
 [ext_resource type="PackedScene" uid="uid://b5k0c38me5gwc" path="res://component/health_component.tscn" id="2_3fvr7"]
+[ext_resource type="AudioStream" uid="uid://c71gv6xqh4vbs" path="res://assets/audio/hit_1.wav" id="3_4ohlc"]
 [ext_resource type="PackedScene" uid="uid://dtcmhq7l4n15v" path="res://component/hurtbox_component.tscn" id="3_dt443"]
+[ext_resource type="AudioStream" uid="uid://6y1ewfvlb168" path="res://assets/audio/hit_2.wav" id="4_aqotc"]
 [ext_resource type="Texture2D" uid="uid://b2vvbp8nulhpl" path="res://entities/enemy/attack_alert.png" id="4_d50e0"]
 [ext_resource type="PackedScene" uid="uid://bqimnq476igie" path="res://component/hitbox_component.tscn" id="5_4wwj3"]
 [ext_resource type="PackedScene" uid="uid://bhbhyubu1rf4x" path="res://component/hit_flash_sprite_component.tscn" id="5_61ikd"]
+[ext_resource type="AudioStream" uid="uid://dlyqtpvaswvbk" path="res://assets/audio/hit_3.wav" id="5_ogeq8"]
 [ext_resource type="Shader" uid="uid://cr17hfwmypsov" path="res://resources/shader/hit_flash.gdshader" id="6_721x4"]
+[ext_resource type="AudioStream" uid="uid://yjlxawbj5aey" path="res://assets/audio/hit_4.wav" id="6_jfjhj"]
 
 [sub_resource type="Animation" id="Animation_eaj7m"]
 length = 0.001
@@ -58,6 +62,15 @@ properties/2/path = NodePath(".:current_state")
 properties/2/spawn = true
 properties/2/replication_mode = 2
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_t1g2p"]
+random_pitch = 1.1
+random_volume_offset_db = 2.0
+streams_count = 4
+stream_0/stream = ExtResource("3_4ohlc")
+stream_1/stream = ExtResource("4_aqotc")
+stream_2/stream = ExtResource("5_ogeq8")
+stream_3/stream = ExtResource("6_jfjhj")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wwj3"]
 size = Vector2(16, 24)
 
@@ -101,6 +114,12 @@ one_shot = true
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_3fvr7")]
 max_health = 2
+
+[node name="HitStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_t1g2p")
+volume_db = -2.0
+max_polyphony = 3
+bus = &"sfx"
 
 [node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("3_dt443")]
 position = Vector2(0, -12)

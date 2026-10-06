@@ -12,6 +12,11 @@ func _ready() -> void:
 	resume_button.pressed.connect(_on_resume_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	
+	UIAudioManager.register_buttons([
+		resume_button,
+		quit_button
+	])
+	
 	if is_multiplayer_authority():
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 

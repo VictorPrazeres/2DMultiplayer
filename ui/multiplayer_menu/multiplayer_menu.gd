@@ -36,6 +36,13 @@ func _ready() -> void:
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	
 	validate()
+	
+	UIAudioManager.register_buttons([
+		back_button,
+		host_button,
+		join_button,
+		error_confirm_button
+	])
 
 
 func validate():

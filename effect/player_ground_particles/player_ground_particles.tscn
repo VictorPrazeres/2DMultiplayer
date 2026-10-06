@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://cxwbdae8auvd8"]
+[gd_scene load_steps=11 format=3 uid="uid://mmquy1xns72x"]
 
-[ext_resource type="Texture2D" uid="uid://fnli6hi6wpnp" path="res://assets/particles.png" id="1_7ctkk"]
+[ext_resource type="Texture2D" uid="uid://fnli6hi6wpnp" path="res://assets/particles.png" id="1_ml36t"]
 
 [sub_resource type="Animation" id="Animation_sdt8k"]
 length = 0.001
@@ -59,21 +59,21 @@ particles_anim_h_frames = 4
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="Gradient" id="Gradient_7ctkk"]
+[sub_resource type="Gradient" id="Gradient_ijqlo"]
 offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.831373, 0.172549, 0.309804, 1)
+colors = PackedColorArray(0.129412, 0.592157, 0.941176, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_sdt8k"]
-gradient = SubResource("Gradient_7ctkk")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fb42d"]
+gradient = SubResource("Gradient_ijqlo")
 
-[sub_resource type="Curve" id="Curve_7ctkk"]
+[sub_resource type="Curve" id="Curve_ofk4y"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.00238095, 1), 0.0, 0.0, 0, 0, Vector2(0.862538, 1), 0.0, 0.0, 0, 0, Vector2(0.865559, 1), 0.0, 0.0, 0, 0, Vector2(0.871601, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 6
 
-[sub_resource type="CurveTexture" id="CurveTexture_sdt8k"]
-curve = SubResource("Curve_7ctkk")
+[sub_resource type="CurveTexture" id="CurveTexture_u5urr"]
+curve = SubResource("Curve_ofk4y")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gfgy8"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_er7ya"]
 lifetime_randomness = 0.5
 particle_flag_disable_z = true
 emission_shape = 1
@@ -83,11 +83,11 @@ angle_max = 720.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.5
 scale_max = 1.5
-scale_curve = SubResource("CurveTexture_sdt8k")
-color_initial_ramp = SubResource("GradientTexture1D_sdt8k")
+scale_curve = SubResource("CurveTexture_u5urr")
+color_initial_ramp = SubResource("GradientTexture1D_fb42d")
 anim_offset_max = 1.0
 
-[node name="EnemyGroundParticles" type="Node2D"]
+[node name="PlayerGroundParticles" type="Node2D"]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -99,11 +99,11 @@ autoplay = "default"
 material = SubResource("CanvasItemMaterial_sdt8k")
 emitting = false
 amount = 10
-texture = ExtResource("1_7ctkk")
+texture = ExtResource("1_ml36t")
 lifetime = 10.0
 one_shot = true
 explosiveness = 0.98
 fixed_fps = 0
 interpolate = false
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_gfgy8")
+process_material = SubResource("ParticleProcessMaterial_er7ya")

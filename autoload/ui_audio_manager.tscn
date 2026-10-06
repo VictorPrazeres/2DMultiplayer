@@ -10,6 +10,7 @@ streams_count = 1
 stream_0/stream = ExtResource("2_mv3kq")
 
 [node name="UIAudioManager" type="Node"]
+process_mode = 3
 script = ExtResource("1_knglf")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

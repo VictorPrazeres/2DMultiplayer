@@ -1,0 +1,105 @@
+[gd_scene load_steps=3 format=3 uid="uid://def06ruty6wid"]
+
+[ext_resource type="PackedScene" uid="uid://bti0xyh2bm8p6" path="res://autoload/background.tscn" id="1_3s1t0"]
+[ext_resource type="Script" uid="uid://cwt2xkcpk8wgj" path="res://ui/options_menu/options_menu.gd" id="1_8h7tm"]
+
+[node name="OptionsMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 5
+script = ExtResource("1_8h7tm")
+
+[node name="Background" parent="." instance=ExtResource("1_3s1t0")]
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 32
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="SfxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SfxDownButton" type="Button" parent="MarginContainer/VBoxContainer/SfxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_vertical = 8
+text = "-"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/SfxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SfxLabel" type="Label" parent="MarginContainer/VBoxContainer/SfxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+text = "SFX VOLUME"
+horizontal_alignment = 1
+
+[node name="SfxProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/SfxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 11)
+layout_mode = 2
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="SfxUpButton" type="Button" parent="MarginContainer/VBoxContainer/SfxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_vertical = 8
+text = "+"
+
+[node name="MusicContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MusicDownButton" type="Button" parent="MarginContainer/VBoxContainer/MusicContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_vertical = 8
+text = "-"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MusicContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MusicLabel" type="Label" parent="MarginContainer/VBoxContainer/MusicContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+text = "MUSIC VOLUME"
+horizontal_alignment = 1
+
+[node name="MusicProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/MusicContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 11)
+layout_mode = 2
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="MusicUpButton" type="Button" parent="MarginContainer/VBoxContainer/MusicContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_vertical = 8
+text = "+"
+
+[node name="DoneButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "DONE"

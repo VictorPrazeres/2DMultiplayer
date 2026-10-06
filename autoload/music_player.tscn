@@ -3,6 +3,7 @@
 [ext_resource type="AudioStream" uid="uid://dvmg43o0cwvac" path="res://assets/audio/All Your Organs Get A Laugh.mp3" id="1_ouhko"]
 
 [node name="MusicPlayer" type="Node"]
+process_mode = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1_ouhko")
